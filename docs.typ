@@ -1,5 +1,5 @@
 #import "@preview/tidy:0.2.0"
-#import "../pubmatter.typ"
+#import "./pubmatter.typ"
 
 #let example = (it) => {
   box(fill: luma(95%), inset: (x: 10pt), width: 100%, it)
@@ -21,7 +21,7 @@
   venue: "Typst Package",
   date: "2024/01/26",
   abstract: [
-    Utilities for loading and working with authors, affiliations, abstracts, keywords and other frontmattter information common in scientific publications.
+    Utilities for loading and working with authors, affiliations, abstracts, keywords and other frontmatter information common in scientific publications.
 
     Our goal is to introduce standardized ways of working with this content to expose metadata to scientific publishers who are interested in using typst in a standardized way. The specification for this pubmatter is based on MyST Markdown and Quarto, and can load their YAML files directly.
   ],
@@ -159,7 +159,7 @@ Note that you will usually write the affiliations directly in line, in the follo
 = API Documentation
 
 #let docs = tidy.parse-module(
-  read("../pubmatter.typ"),
+  read("./pubmatter.typ"),
   name: "pubmatter",
 )
 
