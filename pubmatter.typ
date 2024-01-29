@@ -1,4 +1,4 @@
-#import "@preview/scienceicons:0.0.6": orcid-icon, email-icon, open-access-icon, github-icon
+#import "@preview/scienceicons:0.0.6": orcid-icon, email-icon, open-access-icon, github-icon, cc-icon, cc-zero-icon, cc-by-icon, cc-nc-icon, cc-nd-icon, cc-sa-icon
 #import "./validate-frontmatter.typ": load, show-citation
 
 #let THEME = state("THEME", (color: blue.darken(20%), font: ""))
@@ -92,6 +92,89 @@
 /// -> content
 #let show-spaced-content(spacer: text(fill: gray)[#h(8pt) | #h(8pt)], content) = {
   content.filter(h => h != none and h != "").join(spacer)
+}
+
+
+/// Show license badge
+///
+/// Works for creative common license and other license.
+///
+/// ```example
+/// #pubmatter.show-license-badge(pubmatter.load((license: "CC0")))
+/// ```
+///
+/// ```example
+/// #pubmatter.show-license-badge(pubmatter.load((license: "CC-BY-4.0")))
+/// ```
+///
+/// ```example
+/// #pubmatter.show-license-badge(pubmatter.load((license: "CC-BY-NC-4.0")))
+/// ```
+///
+/// ```example
+/// #pubmatter.show-license-badge(pubmatter.load((license: "CC-BY-NC-ND-4.0")))
+/// ```
+///
+/// - fm (fm): The frontmatter object
+/// -> content
+#let show-license-badge(color: black, fm) = {
+  let license = if ("license" in fm) { fm.license }
+  if (license == none) { return none }
+  if (license.id == "CC0-1.0") {
+    return link(license.url, [#cc-icon(color: color)#cc-zero-icon(color: color)])
+  }
+  if (license.id == "CC-BY-4.0") {
+    return link(license.url, [#cc-icon(color: color)#cc-by-icon(color: color)])
+  }
+  if (license.id == "CC-BY-NC-4.0") {
+    return link(license.url, [#cc-icon(color: color)#cc-by-icon(color: color)#cc-nc-icon(color: color)])
+  }
+  if (license.id == "CC-BY-NC-SA-4.0") {
+    return link(license.url, [#cc-icon(color: color)#cc-by-icon(color: color)#cc-nc-icon(color: color)])
+  }
+  if (license.id == "CC-BY-ND-4.0") {
+    return link(license.url, [#cc-icon(color: color)#cc-by-icon(color: color)#cc-nd-icon(color: color)])
+  }
+  if (license.id == "CC-BY-NC-ND-4.0") {
+    return link(license.url, [#cc-icon(color: color)#cc-by-icon(color: color)#cc-nc-icon(color: color)#cc-nd-icon(color: color)])
+  }
+}
+
+/// Show copyright
+///
+/// Function chose a short citation with the copyright year followed by the license text.
+/// If the license is a Creative Commons License, additional explainer text is shown.
+///
+/// ```example
+/// #pubmatter.show-copyright(fm)
+/// ```
+///
+/// - fm (fm): The frontmatter object
+/// -> content
+#let show-copyright(fm) = {
+  let year = if (fm.date != none) { fm.date.display("[year]") }
+  let citation = show-citation(show-year: false, fm)
+  let license = if ("license" in fm) { fm.license }
+  if (license == none) {
+    return [Copyright © #{ year }
+      #citation#{if (fm.open-access == true){[. This article is open-access.]}}]
+  }
+  return [Copyright © #{ year }
+    #citation.
+    This #{if (fm.open-access == true){[is an open-access article]} else {[article is]}} distributed under the terms of the
+    #link(license.url, license.name) license#{
+      if (license.id == "CC-BY-4.0") {
+        [, which enables reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator]
+      } else if (license.id == "CC-BY-NC-4.0") {
+        [, which enables reusers to distribute, remix, adapt, and build upon the material in any medium or format for _noncommercial purposes only_, and only so long as attribution is given to the creator]
+      } else if (license.id == "CC-BY-NC-SA-4.0") {
+        [, which enables reusers to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must license the modified material under identical terms]
+      } else if (license.id == "CC-BY-ND-4.0") {
+        [, which enables reusers to copy and distribute the material in any medium or format in _unadapted form only_, and only so long as attribution is given to the creator]
+      } else if (license.id == "CC-BY-NC-ND-4.0") {
+        [, which enables reusers to copy and distribute the material in any medium or format in _unadapted form only_, for _noncommercial purposes only_, and only so long as attribution is given to the creator]
+      }
+    }.]
 }
 
 /// Show authors

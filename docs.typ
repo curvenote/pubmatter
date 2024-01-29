@@ -18,6 +18,7 @@
     ),
   ),
   open-access: true,
+  license: "CC-BY-4.0",
   venue: "Typst Package",
   date: "2024/01/26",
   abstract: [
@@ -47,6 +48,7 @@
 #let theme = (color: red.darken(20%), font: "Noto Sans")
 #set page(header: pubmatter.show-page-header(theme: theme, fm), footer: pubmatter.show-page-footer(fm))
 #state("THEME").update(theme)
+#show link: it => [#text(fill: blue)[#it]]
 
 #pubmatter.show-title-block(fm)
 #state("THEME").update((color: purple.darken(20%), font: "Noto Sans"))
@@ -92,6 +94,23 @@ You can also use a `dictionary` directly:
 
 #pagebreak()
 
+= Theming
+
+The theme including color and font choice can be set using the `THEME` state.
+For example, this document has the following theme set:
+
+```typst
+#let theme = (color: red.darken(20%), font: "Noto Sans")
+#set page(header: pubmatter.show-page-header(theme: theme, fm), footer: pubmatter.show-page-footer(fm))
+#state("THEME").update(theme)
+```
+
+Note that for the `header` the theme must be passed in directly. This will hopefully become easier in the future, however, there is a current bug that removes the page header/footer if you set this above the `set page`. See #link("https://github.com/typst/typst/issues/2987")[\#2987].
+
+The `font` option only corresponds to the frontmatter content (abstracts, title, header/footer etc.) allowing the body of your document to have a different font choice.
+
+#pagebreak()
+
 = Normalized Frontmatter Object
 
 The frontmatter object has the following normalized structure:
@@ -126,6 +145,10 @@ affiliations:                   # alias: affiliation
     institution: string         # use either name or institution
 # Other publication metadata
 open-access: boolean
+license:                        # Can be set with a SPDX ID for creative commons
+  id: string
+  url: string
+  name: string
 doi: string                     # must be only the ID, not the full URL
 date: datetime                  # validates from 'YYYY-MM-DD' if a string
 citation: content
@@ -163,4 +186,10 @@ Note that you will usually write the affiliations directly in line, in the follo
   name: "pubmatter",
 )
 
+#let validate-docs = tidy.parse-module(
+  read("./validate-frontmatter.typ"),
+  name: "validate-frontmatter",
+)
+
 #tidy.show-module(docs)
+#tidy.show-module(validate-docs)

@@ -242,21 +242,77 @@
   return (authors: authors, affiliations: affiliations)
 }
 
-/*
-Create a short citation in APA format, e.g. Cockett et al., 2023
-*/
-#let show-citation(authors, date, citation) = {
-  let year = if (date != none) { ", " + date.display("[year]") } else { none }
-  if (citation == auto and authors.len() == 1) {
-    citation = authors.at(0).name.split(" ").last() + year
-  } else if (citation == auto and authors.len() == 2) {
-    citation = authors.at(0).name.split(" ").last() + " & " + authors.at(1).name.split(" ").last() + year
-  } else if (citation == auto and authors.len() > 2) {
-    citation = authors.at(0).name.split(" ").last() + " " + emph("et al.") + year
-  } else if (citation == auto) {
-    citation = none
+/// Create a short citation in APA format, e.g. Cockett et al., 2023
+/// - show-year (boolean): Include the year in the citation
+/// - fm (fm): The frontmatter object
+/// -> content
+#let show-citation(show-year: true, fm) = {
+  if ("authors" not in fm) {return none}
+  let authors = fm.authors
+  let date = fm.date
+  let year = if (show-year and date != none) { ", " + date.display("[year]") } else { none }
+  if (authors.len() == 1) {
+    return authors.at(0).name.split(" ").last() + year
+  } else if (authors.len() == 2) {
+    return authors.at(0).name.split(" ").last() + " & " + authors.at(1).name.split(" ").last() + year
+  } else if (authors.len() > 2) {
+    return authors.at(0).name.split(" ").last() + " " + emph("et al.") + year
   }
-  return citation
+  return none
+}
+
+
+#let validateLicense(raw) = {
+  if ("license" not in raw) { return none }
+  let rawLicense = raw.at("license")
+  if (type(rawLicense) == str) {
+    if (rawLicense == "CC0"  or rawLicense == "CC0-1.0") {
+      return (
+        id: "CC0-1.0",
+        url: "https://creativecommons.org/licenses/zero/1.0/",
+        name: "Creative Commons Zero v1.0 Universal",
+      )
+    } else if (rawLicense == "CC-BY" or rawLicense == "CC-BY-4.0") {
+      return (
+        id: "CC-BY-4.0",
+        url: "https://creativecommons.org/licenses/by/4.0/",
+        name: "Creative Commons Attribution 4.0 International",
+      )
+    } else if (rawLicense == "CC-BY-NC" or rawLicense == "CC-BY-NC-4.0") {
+      return (
+        id: "CC-BY-NC-4.0",
+        url: "https://creativecommons.org/licenses/by-nc/4.0/",
+        name: "Creative Commons Attribution Non Commercial 4.0 International",
+      )
+    } else if (rawLicense == "CC-BY-NC-SA" or rawLicense == "CC-BY-NC-SA-4.0") {
+      return (
+        id: "CC-BY-NC-SA-4.0",
+        url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        name: "Creative Commons Attribution Non Commercial Share Alike 4.0 International",
+      )
+    } else if (rawLicense == "CC-BY-ND" or rawLicense == "CC-BY-ND-4.0") {
+      return (
+        id: "CC-BY-ND-4.0",
+        url: "https://creativecommons.org/licenses/by-nd/4.0/",
+        name: "Creative Commons Attribution No Derivatives 4.0 International",
+      )
+    } else if (rawLicense == "CC-BY-NC-ND" or rawLicense == "CC-BY-NC-ND-4.0") {
+      return (
+        id: "CC-BY-NC-ND-4.0",
+        url: "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+        name: "Creative Commons Attribution Non Commercial No Derivatives 4.0 International",
+      )
+    }
+    panic("Unknown license string: '" + rawLicense + "'")
+  }
+  if (type(rawLicense) == dictionary) {
+    assert("id" in rawLicense and "url" in rawLicense and "name" in rawLicense, message: "License nust contain fields of 'id' (the SPDX ID), 'url': the URL to the license, and 'name' the human-readable license name")
+    let id = validateString(rawLicense, "id")
+    let url = validateString(rawLicense, "url")
+    let name = validateString(rawLicense, "name")
+    return (id: id, url: url, name: name)
+  }
+  panic("Unknown format for license: '" + type(rawLicense) + "'")
 }
 
 #let load(raw) = {
@@ -285,6 +341,8 @@ Create a short citation in APA format, e.g. Cockett et al., 2023
     } else {
       panic("The `author` or `authors` must be a array, dictionary or string, got:", type(raw.authors))
     }
+  } else {
+    out.authors = ()
   }
 
   let affiliations = pickAffiliationsObject(raw);
@@ -294,6 +352,8 @@ Create a short citation in APA format, e.g. Cockett et al., 2023
   if (open-access != none) { out.open-access = open-access }
   let venue = validateString(raw, "venue")
   if (venue != none) { out.venue = venue }
+  let license = validateLicense(raw)
+  if (license != none) { out.license = license }
   let doi = validateString(raw, "doi")
   if (doi != none) {
     assert(not doi.starts-with("http"), message: "DOIs should not include the link, use only the part after `https://doi.org/[]`")
@@ -310,7 +370,7 @@ Create a short citation in APA format, e.g. Cockett et al., 2023
   if (citation != none) {
     out.citation = citation;
   } else {
-    out.citation = show-citation(out.authors, out.date, auto)
+    out.citation = show-citation(out)
   }
 
   if ("abstract" in raw and "abstracts" in raw) {
