@@ -157,11 +157,11 @@
   let license = if ("license" in fm) { fm.license }
   if (license == none) {
     return [Copyright © #{ year }
-      #citation#{if (fm.open-access == true){[. This article is open-access.]}}]
+      #citation#{if (fm.at("open-access", default: none) == true){[. This article is open-access.]}}]
   }
   return [Copyright © #{ year }
     #citation.
-    This #{if (fm.open-access == true){[is an open-access article]} else {[article is]}} distributed under the terms of the
+    This #{if (fm.at("open-access", default: none) == true){[is an open-access article]} else {[article is]}} distributed under the terms of the
     #link(license.url, license.name) license#{
       if (license.id == "CC-BY-4.0") {
         [, which enables reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator]
@@ -206,6 +206,7 @@
 
   return box(inset: (top: 10pt, bottom: 5pt), width: 100%, {
     with-theme((theme) => {
+      set text(size, font: theme.font)
       authors.map(author => {
         text(size, font: theme.font, weight: weight, author.name)
         if (show-affiliations and "affiliations" in author) {
