@@ -27,6 +27,8 @@ The full documentation can be found in [docs.pdf](https://github.com/curvenote/p
 #import "@preview/pubmatter:0.1.0"
 ```
 
+The docs also use `pubmatter`, in a simplified way, you can see the [docs.typ](https://github.com/curvenote/pubmatter/blob/main/docs.typ) to see a simple example of using various components to create a new document. Here is a preview of the docs:
+
 [![](https://github.com/curvenote/pubmatter/blob/main/images/pubmatter.png?raw=true)](https://github.com/curvenote/pubmatter/blob/main/docs.pdf)
 
 ### Loading Frontmatter
