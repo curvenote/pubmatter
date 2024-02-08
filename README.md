@@ -1,6 +1,11 @@
-# pubmatter - Make Beautiful Scientific Documents
+# pubmatter
 
-A typst library for parsing, normalizing and showing scientific publication frontmatter.
+_Beautiful scientific documents with structured metadata for publishers_
+
+[![Documentation](https://img.shields.io/badge/typst-docs-orange.svg)](https://github.com/curvenote/pubmatter/blob/main/docs.pdf)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/pubmatter/blob/main/LICENSE)
+
+Pubmatter is a typst library for parsing, normalizing and showing scientific publication frontmatter.
 
 Utilities for loading, normalizing and working with authors, affiliations, abstracts, keywords and other frontmatter information common in scientific publications. Our goal is to introduce standardized ways of working with this content to expose metadata to scientific publishers who are interested in using typst in a standardized way. The specification for this `pubmatter` is based on [MyST Markdown](https://mystmd.org) and [Quarto](https://quarto.org), and can load their YAML files directly.
 
@@ -16,7 +21,11 @@ Pubmatter was used to create these documents, for loading the authors in a stand
 
 ## Documentation
 
-The full documentation can be found in [docs.pdf](https://github.com/curvenote/pubmatter/blob/main/docs.pdf).
+The full documentation can be found in [docs.pdf](https://github.com/curvenote/pubmatter/blob/main/docs.pdf). To use `pubmatter` import it:
+
+```typst
+#import "@preview/pubmatter:0.1.0"
+```
 
 [![](https://github.com/curvenote/pubmatter/blob/main/images/pubmatter.png?raw=true)](https://github.com/curvenote/pubmatter/blob/main/docs.pdf)
 
