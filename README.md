@@ -11,7 +11,7 @@ Utilities for loading, normalizing and working with authors, affiliations, abstr
 
 ## Examples
 
-Pubmatter was used to create these documents, for loading the authors in a standardized way and creting the common elements (authors, affiliations, ORCIDs, DOIs, Open Access Links, copyright statements, etc.)
+Pubmatter was used to create these documents, for loading the authors in a standardized way and creating the common elements (authors, affiliations, ORCIDs, DOIs, Open Access Links, copyright statements, etc.)
 
 ![](https://github.com/curvenote/pubmatter/blob/main/images/lapreprint.png?raw=true)
 
