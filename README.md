@@ -2,7 +2,17 @@
 
 A typst library for parsing, normalizing and showing scientific publication frontmatter.
 
-Utilities for loading, normalizing and working with authors, affiliations, abstracts, keywords and other frontmatter information common in scientific publications. Our goal is to introduce standardized ways of working with this content to expose metadata to scientific publishers who are interested in using typst in a standardized way. The specification for this `pubmatter` is based on MyST Markdown and Quarto, and can load their YAML files directly.
+Utilities for loading, normalizing and working with authors, affiliations, abstracts, keywords and other frontmatter information common in scientific publications. Our goal is to introduce standardized ways of working with this content to expose metadata to scientific publishers who are interested in using typst in a standardized way. The specification for this `pubmatter` is based on [MyST Markdown](https://mystmd.org) and [Quarto](https://quarto.org), and can load their YAML files directly.
+
+## Examples
+
+Pubmatter was used to create these documents, for loading the authors in a standardized way and creting the common elements (authors, affiliations, ORCIDs, DOIs, Open Access Links, copyright statements, etc.)
+
+![](https://github.com/curvenote/pubmatter/blob/main/images/lapreprint.png?raw=true)
+
+![](https://github.com/curvenote/pubmatter/blob/main/images/scipy.png?raw=true)
+
+![](https://github.com/curvenote/pubmatter/blob/main/images/agrogeo.png?raw=true)
 
 ## Documentation
 
