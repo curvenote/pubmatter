@@ -7,7 +7,7 @@
 
 #let fm = pubmatter.load((
   title: "pubmatter",
-  subtitle: "A typst library for parsing and showing publication frontmatter",
+  subtitle: "A typst library for parsing, normalizing and showing publication frontmatter",
   authors: (
     (
       name: "Rowan Cockett",
@@ -160,7 +160,7 @@ abstracts:                      # alias: abstract
 ```
 
 #pagebreak()
-Note that you will usually write the affiliations directly in line, in the following example, we can see that the output is a normalized affiliation object whtat is linked by the `id` of the affiliation (just the name if it is a string!).
+Note that you will usually write the affiliations directly in line, in the following example, we can see that the output is a normalized affiliation object that is linked by the `id` of the affiliation (just the name if it is a string!).
 
 ```example
 #let fm = pubmatter.load((

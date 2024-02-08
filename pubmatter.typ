@@ -263,7 +263,7 @@
 }
 
 
-/// Show author block
+/// Show author block, including author, icon links (e.g. ORCID, email, etc.) and affiliations
 ///
 /// ```example
 /// #pubmatter.show-author-block(fm)
@@ -276,7 +276,7 @@
   show-affiliations(fm)
 }
 
-/// Show title
+/// Show title and subtitle
 ///
 /// ```example
 /// #pubmatter.show-title(fm)
@@ -299,7 +299,7 @@
   })
 }
 
-/// Show title block
+/// Show title block - title, authors and affiliations
 ///
 /// ```example
 /// #pubmatter.show-title-block(fm)
@@ -315,6 +315,8 @@
 }
 
 /// Show page footer
+///
+/// Default is the venue, date and page numbers
 ///
 /// ```example
 /// #pubmatter.show-page-footer(fm)
@@ -350,6 +352,8 @@
 
 /// Show page header
 ///
+/// Default an open-access badge and the DOI and then the running-title and citation
+///
 /// ```example
 /// #pubmatter.show-page-header(theme: (font: "Noto Sans"), fm)
 /// ```
@@ -378,7 +382,7 @@
   })
 }
 
-/// Show abstracts
+/// Show all abstracts (e.g. abstract, plain language summary)
 ///
 /// ```example
 /// #pubmatter.show-abstracts(fm)
@@ -433,7 +437,7 @@
   }
 }
 
-/// Show abstract-block
+/// Show abstract-block including all abstracts and keywords
 ///
 /// ```example
 /// #pubmatter.show-abstract-block(fm)

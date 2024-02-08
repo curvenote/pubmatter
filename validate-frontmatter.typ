@@ -242,7 +242,7 @@
   return (authors: authors, affiliations: affiliations)
 }
 
-/// Create a short citation in APA format, e.g. Cockett et al., 2023
+/// Create a short citation in APA format, e.g. Cockett _et al._, 2023
 /// - show-year (boolean): Include the year in the citation
 /// - fm (fm): The frontmatter object
 /// -> content
