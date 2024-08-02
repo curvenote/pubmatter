@@ -1,4 +1,4 @@
-#import "@preview/scienceicons:0.0.6": orcid-icon, email-icon, open-access-icon, github-icon, cc-icon, cc-zero-icon, cc-by-icon, cc-nc-icon, cc-nd-icon, cc-sa-icon
+#import "@preview/scienceicons:0.0.6": orcid-icon, email-icon, open-access-icon, github-icon, cc-icon, cc-zero-icon, cc-by-icon, cc-nc-icon, cc-nd-icon, cc-sa-icon, ror-icon
 #import "./validate-frontmatter.typ": load, show-citation
 
 #let THEME = state("THEME", (color: blue.darken(20%), font: ""))
@@ -23,6 +23,7 @@
 ) = {
   let orcid-green = rgb("#AECD54")
   if (orcid == none) { return orcid-icon(color: orcid-green) }
+  if (orcid.starts-with("https://")) { return link(orcid, orcid-icon(color: orcid-green)) }
   return link("https://orcid.org/" + orcid, orcid-icon(color: orcid-green))
 }
 
@@ -37,7 +38,23 @@
 #let doi-link(doi: none) = {
   if (doi == none) { return none }
   // Proper practices are to show the whole DOI link in text
+  if (doi.starts-with("https://")) { return link(doi, doi) };
   return link("https://doi.org/" + doi, "https://doi.org/" + doi)
+}
+
+/// Create a ROR link
+///
+/// ```example
+/// #pubmatter.ror-link(ror: "03zbydc22")
+/// ```
+///
+/// - ror (str): Only include the ROR identifier, not the URL
+/// -> content
+#let ror-link(ror: none) = {
+  let ror-black = rgb("#2c2c2c")
+  if (ror == none) { return none }
+  if (ror.starts-with("https://")) { return link(ror, ror-icon(color: ror-black)) };
+  return link("https://ror.org/" + ror, ror-icon(color: ror-black))
 }
 
 /// Create a mailto link with an email icon
@@ -75,6 +92,7 @@
 /// - github (str): GitHub username (no `@`)
 /// -> content
 #let github-link(github: none) = {
+  if (github.starts-with("https://")) { return link(github, github-icon()) }
   return link("https://github.com/" + github, github-icon())
 }
 
@@ -240,9 +258,10 @@
 ///
 /// - size (length): Size of the affiliations text
 /// - fill (color): Color of of the affiliations text
+/// - show-ror (boolean): Show ror logo
 /// - affiliations (fm, array): The frontmatter object or affiliations directly
 /// -> content
-#let show-affiliations(size: 8pt, fill: gray.darken(50%), affiliations) = {
+#let show-affiliations(size: 8pt, fill: gray.darken(50%), show-ror: true, affiliations) = {
   // Allow to pass frontmatter as well
   let affiliations = if (type(affiliations) == dictionary and "affiliations" in affiliations) {affiliations.affiliations} else { affiliations }
   if affiliations.len() == 0 { return none }
@@ -256,6 +275,9 @@
           affiliation.name
         } else if ("institution" in affiliation) {
           affiliation.institution
+        }
+        if ("ror" in affiliation) {
+          " " + ror-link(ror: affiliation.ror)
         }
       }).join(", ")
     })
