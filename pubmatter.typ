@@ -394,12 +394,12 @@
       // https://github.com/typst/typst/issues/2987
       return align(left, text(size: 8pt, font: theme.font, fill: gray, show-spaced-content(headers)))
     } else {
-      return align(right, text(size: 8pt, font: theme.font, fill: gray.darken(50%),
+      return align(right + top, box(inset: (top: 1cm), text(size: 8pt, font: theme.font, fill: gray.darken(50%),
         show-spaced-content((
           if ("short-title" in fm) { fm.short-title } else if ("title" in fm) { fm.title },
           if ("citation" in fm) { fm.citation },
         ))
-      ))
+      )))
     }
   })
 }
