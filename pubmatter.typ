@@ -356,10 +356,9 @@
 /// #pubmatter.show-page-header(theme: (font: "Noto Sans"), fm)
 /// ```
 ///
-/// - theme (theme): The theme object, There is a bug in the first page state update, so theme must be passed directly. See #link("https://github.com/typst/typst/issues/2987")[\#2987]
 /// - fm (fm): The frontmatter object
 /// -> content
-#let show-page-header(theme: THEME, fm) = context {
+#let show-page-header(fm) = context {
   let loc = here()
   if(loc.page() == 1) {
     let headers = (
@@ -368,14 +367,17 @@
     )
     // TODO: There is a bug in the first page state update
     // https://github.com/typst/typst/issues/2987
-    return align(left, text(size: 8pt, font: theme.font, fill: gray, show-spaced-content(headers)))
+    return with-theme((theme) => {
+      align(left, text(size: 8pt, font: theme.font, fill: gray, show-spaced-content(headers)))
+    })
   } else {
-    return align(right, text(size: 8pt, font: theme.font, fill: gray.darken(50%),
+    return  with-theme((theme) => {align(right, text(size: 8pt, font: theme.font, fill: gray.darken(50%),
       show-spaced-content((
         if ("short-title" in fm) { fm.short-title } else if ("title" in fm) { fm.title },
         if ("citation" in fm) { fm.citation },
       ))
     ))
+    })
   }
 }
 

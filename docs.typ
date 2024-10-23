@@ -46,8 +46,8 @@
 
 
 #let theme = (color: red.darken(20%), font: "Noto Sans")
-#set page(header: pubmatter.show-page-header(theme: theme, fm), footer: pubmatter.show-page-footer(fm))
 #state("THEME").update(theme)
+#set page(header: pubmatter.show-page-header(theme: theme, fm), footer: pubmatter.show-page-footer(fm))
 #show link: it => [#text(fill: blue)[#it]]
 
 #pubmatter.show-title-block(fm)
@@ -101,8 +101,8 @@ For example, this document has the following theme set:
 
 ```typst
 #let theme = (color: red.darken(20%), font: "Noto Sans")
-#set page(header: pubmatter.show-page-header(theme: theme, fm), footer: pubmatter.show-page-footer(fm))
 #state("THEME").update(theme)
+#set page(header: pubmatter.show-page-header(theme: theme, fm), footer: pubmatter.show-page-footer(fm))
 ```
 
 Note that for the `header` the theme must be passed in directly. This will hopefully become easier in the future, however, there is a current bug that removes the page header/footer if you set this above the `set page`. See #link("https://github.com/typst/typst/issues/2987")[\#2987].
