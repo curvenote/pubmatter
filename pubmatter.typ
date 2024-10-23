@@ -3,11 +3,9 @@
 
 #let THEME = state("THEME", (color: blue.darken(20%), font: ""))
 
-#let with-theme(func) = {
-  locate(loc => {
-    let theme = THEME.at(loc)
-    func(theme)
-  })
+#let with-theme(func) = context {
+  let theme = THEME.at(here())
+  func(theme)
 }
 
 /// Create a ORCID link with an ORCID logo
@@ -342,7 +340,7 @@
           #text(
             size: 9pt, fill: gray.darken(50%)
           )[
-            #counter(page).display() of #locate((loc) => {counter(page).final(loc).first()})
+            #counter(page).display() of #{context {counter(page).final(here()).first()}}
           ]
         ]
       )
@@ -361,25 +359,24 @@
 /// - theme (theme): The theme object, There is a bug in the first page state update, so theme must be passed directly. See #link("https://github.com/typst/typst/issues/2987")[\#2987]
 /// - fm (fm): The frontmatter object
 /// -> content
-#let show-page-header(theme: THEME, fm) = {
-  locate(loc => {
-    if(loc.page() == 1) {
-      let headers = (
-        if ("open-access" in fm) {[#smallcaps[Open Access] #open-access-link()]},
-        if ("doi" in fm) { link("https://doi.org/" + fm.doi, "https://doi.org/" + fm.doi)}
-      )
-      // TODO: There is a bug in the first page state update
-      // https://github.com/typst/typst/issues/2987
-      return align(left, text(size: 8pt, font: theme.font, fill: gray, show-spaced-content(headers)))
-    } else {
-      return align(right, text(size: 8pt, font: theme.font, fill: gray.darken(50%),
-        show-spaced-content((
-          if ("short-title" in fm) { fm.short-title } else if ("title" in fm) { fm.title },
-          if ("citation" in fm) { fm.citation },
-        ))
+#let show-page-header(theme: THEME, fm) = context {
+  let loc = here()
+  if(loc.page() == 1) {
+    let headers = (
+      if ("open-access" in fm) {[#smallcaps[Open Access] #open-access-link()]},
+      if ("doi" in fm) { link("https://doi.org/" + fm.doi, "https://doi.org/" + fm.doi)}
+    )
+    // TODO: There is a bug in the first page state update
+    // https://github.com/typst/typst/issues/2987
+    return align(left, text(size: 8pt, font: theme.font, fill: gray, show-spaced-content(headers)))
+  } else {
+    return align(right, text(size: 8pt, font: theme.font, fill: gray.darken(50%),
+      show-spaced-content((
+        if ("short-title" in fm) { fm.short-title } else if ("title" in fm) { fm.title },
+        if ("citation" in fm) { fm.citation },
       ))
-    }
-  })
+    ))
+  }
 }
 
 /// Show all abstracts (e.g. abstract, plain language summary)
